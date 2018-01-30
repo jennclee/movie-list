@@ -1,0 +1,32 @@
+{
+  "name": "movie-list",
+  "version": "1.0.0",
+  "description": "Simple movie list application",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack -d --watch",
+    "start": "nodemon ./server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jennclee/movie-list.git"
+  },
+  "author": "Jennifer Lee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jennclee/movie-list/issues"
+  },
+  "homepage": "https://github.com/jennclee/movie-list#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "express": "^4.16.2",
+    "nodemon": "^1.14.11",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "webpack": "^3.10.0"
+  }
+}
