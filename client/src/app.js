@@ -1,15 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-class Main extends React.Component {
+class MovieList extends React.Component {
+  constructor() {
+    super();
+  }
+
   render() {
     return (
-      <div>
-        <h1>Hello World</h1>
-      </div>
+      <div></div>
     )
   }
 }
 
-const app = document.getElementById('app')
-ReactDOM.render(<Main />, app)
+ReactDOM.render(<MovieList />, document.getElementById('app'));
