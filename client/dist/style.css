@@ -1,0 +1,8 @@
+.movie {
+  border: 1px;
+  border-style: solid;
+  border-color: black;
+  background: lightgray;
+  margin: 5px 0 5px 0;
+  padding: 5px;
+}
