@@ -5,7 +5,7 @@ export default class Search extends React.Component {
     super(props);
     this.state = {
       searchText: '',
-    }
+    };
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
   }
@@ -16,7 +16,7 @@ export default class Search extends React.Component {
     });
     this.props.clear();
   }
-  
+
   handleOnSubmit(event) {
     event.preventDefault();
     this.props.search(this.state.searchText);
@@ -32,4 +32,4 @@ export default class Search extends React.Component {
       </div>
     );
   }
-};
+}
