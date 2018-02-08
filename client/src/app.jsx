@@ -14,13 +14,35 @@ class MovieList extends React.Component {
         { title: 'Sunshine' },
         { title: 'Ex Machina' },
       ],
-      searchText: '',
+      originalMovies: [],
     };
+    this.handleOnSearch = this.handleOnSearch.bind(this);
+    this.handleClearSearch = this.handleClearSearch.bind(this);
   }
 
-  search(text) {
+  handleClearSearch() {
+    if (this.state.movies.length < this.state.originalMovies.length) {
+      this.setState({
+        movies: this.state.originalMovies
+      });
+    } else if (this.state.movies.length > this.state.originalMovies.length) {
+      this.setState({
+        originalMovies: this.state.movies
+      });
+    }
+  }
+
+  handleOnSearch(text) {
+    this.handleClearSearch();
+    const searchResults = [];
+    const movieList = this.state.movies;
+    for (let i = 0; i < movieList.length; i++) {
+      if (movieList[i].title.includes(text)) {
+        searchResults.push(movieList[i]);
+      }
+    }
     this.setState({
-      searchText: text
+      movies: searchResults
     });
   }
 
@@ -28,11 +50,14 @@ class MovieList extends React.Component {
     return (
       <div>
         <div className="navbar">
-          <Search search={this.search} />
+          <Search search={this.handleOnSearch} clear={this.handleClearSearch} />
         </div>
-        {this.state.movies.map((movie) => {
-          return <Movie movie={movie} key={movie.title} />;
-        })}
+        <hr />
+        <div className="movie-list">
+          {this.state.movies.map((movie) => {
+            return <Movie movie={movie} key={movie.title} />;
+          })}
+        </div>
       </div>
     );
   }
