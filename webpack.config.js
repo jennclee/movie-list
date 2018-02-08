@@ -1,20 +1,25 @@
 const path = require('path');
 
-const config = {
-  entry: './client/src/app.js',
+const SRC_DIR = path.join(__dirname, '/client/src');
+const DIST_DIR = path.join(__dirname, '/client/dist');
+
+module.exports = {
+  entry: `${SRC_DIR}/app.jsx`,
   output: {
-    path: path.resolve(__dirname, './client/dist'),
+    path: DIST_DIR,
     filename: 'bundle.js',
   },
   module: {
-    rules: [
+    loaders: [
       {
-        test: /\.js$/,
+        test: /\.jsx$/,
+        include: SRC_DIR,
         loader: 'babel-loader',
         exclude: /node_modules/,
+        query: {
+          presets: ['react', 'es2015']
+        }
       },
     ],
   },
 };
-
-module.exports = config;
