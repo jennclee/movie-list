@@ -14,9 +14,11 @@ export default class Search extends React.Component {
     this.setState({
       searchText: event.target.value
     });
+    this.props.clear();
   }
   
-  handleOnSubmit() {
+  handleOnSubmit(event) {
+    event.preventDefault();
     this.props.search(this.state.searchText);
   }
 
