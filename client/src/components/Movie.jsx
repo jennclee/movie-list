@@ -4,7 +4,11 @@ import MovieDetails from './MovieDetails.jsx';
 export default class Movie extends React.Component {
   constructor(props) {
     super(props);
-    
+    this.handleOnWatched = this.handleOnWatched.bind(this);
+  }
+
+  handleOnWatched() {
+    this.props.watched(this.props.movie);
   }
 
   render() {
@@ -12,6 +16,7 @@ export default class Movie extends React.Component {
       <div>
         <div className="movie">
           <p>{this.props.movie.title}</p>
+          <button onClick={this.handleOnWatched}>Watched</button>
         </div>
       </div>
     );
