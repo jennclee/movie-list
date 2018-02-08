@@ -9,17 +9,18 @@ class MovieList extends React.Component {
     super();
     this.state = {
       movies: [
-        { title: 'Mean Girls' },
-        { title: 'Hackers' },
-        { title: 'The Grey' },
-        { title: 'Sunshine' },
-        { title: 'Ex Machina' },
+        { title: 'Mean Girls', watched: false },
+        { title: 'Hackers', watched: false },
+        { title: 'The Grey', watched: false },
+        { title: 'Sunshine', watched: false },
+        { title: 'Ex Machina', watched: false },
       ],
       originalMovies: [],
     };
     this.handleOnSearch = this.handleOnSearch.bind(this);
     this.handleClearSearch = this.handleClearSearch.bind(this);
     this.handleOnAdd = this.handleOnAdd.bind(this);
+    this.handleOnWatched = this.handleOnWatched.bind(this);
   }
 
   handleClearSearch() {
@@ -62,6 +63,15 @@ class MovieList extends React.Component {
     // TODO: Check if movie is already in list
   }
 
+  handleOnWatched(movie) {
+    let updatedMovies = this.state.movies;
+    for (let i = 0; i < updatedMovies.length; i++) {
+      if (updatedMovies[i].title === movie.title) {
+        updatedMovies[i].watched = !updatedMovies[i].watched;
+      }
+    }
+  }
+
   render() {
     return (
       <div>
@@ -72,7 +82,7 @@ class MovieList extends React.Component {
         <hr />
         <div className="movie-list">
           {this.state.movies.map((movie) => {
-            return <Movie movie={movie} key={movie.title} />;
+            return <Movie movie={movie} key={movie.title} watched={this.handleOnWatched} />;
           })}
         </div>
       </div>
