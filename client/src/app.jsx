@@ -34,12 +34,17 @@ class MovieList extends React.Component {
 
   handleOnSearch(text) {
     this.handleClearSearch();
-    const searchResults = [];
+    let searchResults = [];
     const movieList = this.state.movies;
     for (let i = 0; i < movieList.length; i++) {
       if (movieList[i].title.includes(text)) {
         searchResults.push(movieList[i]);
       }
+    }
+    if (searchResults.length === 0) {
+      searchResults = [
+        { title: 'There are no movies on your list with this title. Please try another search term!' }
+      ];
     }
     this.setState({
       movies: searchResults
