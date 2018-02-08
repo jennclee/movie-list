@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Movie from './components/Movie.jsx';
 import Search from './components/Search.jsx';
+import AddMovie from './components/AddMovie.jsx';
 
 class MovieList extends React.Component {
   constructor() {
@@ -18,6 +19,7 @@ class MovieList extends React.Component {
     };
     this.handleOnSearch = this.handleOnSearch.bind(this);
     this.handleClearSearch = this.handleClearSearch.bind(this);
+    this.handleOnAdd = this.handleOnAdd.bind(this);
   }
 
   handleClearSearch() {
@@ -51,11 +53,21 @@ class MovieList extends React.Component {
     });
   }
 
+  handleOnAdd(movie) {
+    const newMovieList = this.state.movies;
+    newMovieList.push({ title: movie });
+    this.setState({
+      movies: newMovieList
+    });
+    // TODO: Check if movie is already in list
+  }
+
   render() {
     return (
       <div>
         <div className="navbar">
           <Search search={this.handleOnSearch} clear={this.handleClearSearch} />
+          <AddMovie add={this.handleOnAdd} />
         </div>
         <hr />
         <div className="movie-list">
