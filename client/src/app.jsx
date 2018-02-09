@@ -40,10 +40,11 @@ class MovieList extends React.Component {
 
   handleOnSearch(text) {
     this.handleClearSearch();
+    const searchTerm = text.charAt(0).toUpperCase() + text.substr(1);
     let searchResults = [];
     const movieList = this.state.movies;
     movieList.forEach((movie) => {
-      if (movie.title.includes(text)) {
+      if (movie.title.includes(searchTerm)) {
         searchResults.push(movie);
       }
     });
