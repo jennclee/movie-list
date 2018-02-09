@@ -21,6 +21,9 @@ class MovieList extends React.Component {
     this.handleClearSearch = this.handleClearSearch.bind(this);
     this.handleOnAdd = this.handleOnAdd.bind(this);
     this.handleOnWatched = this.handleOnWatched.bind(this);
+    this.handleFilterWatched = this.handleFilterWatched.bind(this);
+    this.handleFilterUnwatched = this.handleFilterUnwatched.bind(this);
+    this.handleShowAll = this.handleShowAll.bind(this);
   }
 
   handleClearSearch() {
@@ -72,15 +75,62 @@ class MovieList extends React.Component {
     }
   }
 
+  handleShowAll() {
+    if (this.state.originalMovies.length > this.state.movies.length) {
+      this.setState({
+        movies: this.state.originalMovies
+      });
+    }
+    console.log(this.state.originalMovies);
+  }
+
+  handleFilterWatched() {
+    const watchedMovies = this.state.originalMovies.filter((movie) => {
+      return movie.watched === true;
+    });
+    console.log(watchedMovies);
+    if (this.state.originalMovies.length < this.state.movies.length) {
+      this.setState({
+        originalMovies: this.state.movies,
+        movies: watchedMovies
+      });
+    } else {
+      this.setState({
+        movies: watchedMovies
+      });
+    }
+  }
+
+  handleFilterUnwatched() {
+    const unwatchedMovies = this.state.originalMovies.filter((movie) => {
+      return movie.watched === false;
+    });
+    console.log(unwatchedMovies);
+    if (this.state.originalMovies.length < this.state.movies.length) {
+      this.setState({
+        originalMovies: this.state.movies,
+        movies: unwatchedMovies
+      });
+    } else {
+      this.setState({
+        movies: unwatchedMovies
+      });
+    }
+  }
+
   render() {
     return (
       <div>
         <div className="navbar">
           <Search search={this.handleOnSearch} clear={this.handleClearSearch} />
+          <br />
           <AddMovie add={this.handleOnAdd} />
         </div>
         <hr />
         <div className="movie-list">
+          <button onClick={this.handleShowAll}>All</button>
+          <button onClick={this.handleFilterWatched}>Watched</button>
+          <button onClick={this.handleFilterUnwatched}>Unwatched</button>
           {this.state.movies.map((movie) => {
             return <Movie movie={movie} key={movie.title} watched={this.handleOnWatched} />;
           })}
