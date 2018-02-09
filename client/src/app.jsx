@@ -42,11 +42,11 @@ class MovieList extends React.Component {
     this.handleClearSearch();
     let searchResults = [];
     const movieList = this.state.movies;
-    for (let i = 0; i < movieList.length; i++) {
-      if (movieList[i].title.includes(text)) {
-        searchResults.push(movieList[i]);
+    movieList.forEach((movie) => {
+      if (movie.title.includes(text)) {
+        searchResults.push(movie);
       }
-    }
+    });
     if (searchResults.length === 0) {
       searchResults = [
         { title: 'There are no movies on your list with this title. Please try another search term!' }
@@ -68,11 +68,11 @@ class MovieList extends React.Component {
 
   handleOnWatched(movie) {
     let updatedMovies = this.state.movies;
-    for (let i = 0; i < updatedMovies.length; i++) {
-      if (updatedMovies[i].title === movie.title) {
-        updatedMovies[i].watched = !updatedMovies[i].watched;
+    updatedMovies.forEach((updatedMovie) => {
+      if (updatedMovie.title === movie.title) {
+        updatedMovie.watched = !updatedMovie.watched;
       }
-    }
+    });
   }
 
   handleShowAll() {
@@ -81,14 +81,12 @@ class MovieList extends React.Component {
         movies: this.state.originalMovies
       });
     }
-    console.log(this.state.originalMovies);
   }
 
   handleFilterWatched() {
     const watchedMovies = this.state.originalMovies.filter((movie) => {
       return movie.watched === true;
     });
-    console.log(watchedMovies);
     if (this.state.originalMovies.length < this.state.movies.length) {
       this.setState({
         originalMovies: this.state.movies,
@@ -105,7 +103,6 @@ class MovieList extends React.Component {
     const unwatchedMovies = this.state.originalMovies.filter((movie) => {
       return movie.watched === false;
     });
-    console.log(unwatchedMovies);
     if (this.state.originalMovies.length < this.state.movies.length) {
       this.setState({
         originalMovies: this.state.movies,
