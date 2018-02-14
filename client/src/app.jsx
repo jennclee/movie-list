@@ -4,17 +4,13 @@ import Movie from './components/Movie.jsx';
 import Search from './components/Search.jsx';
 import AddMovie from './components/AddMovie.jsx';
 
+const axios = require('axios');
+
 class MovieList extends React.Component {
   constructor() {
     super();
     this.state = {
-      movies: [
-        { title: 'Mean Girls', watched: false },
-        { title: 'Hackers', watched: false },
-        { title: 'The Grey', watched: false },
-        { title: 'Sunshine', watched: false },
-        { title: 'Ex Machina', watched: false },
-      ],
+      movies: [],
       originalMovies: [],
     };
     this.handleOnSearch = this.handleOnSearch.bind(this);
@@ -24,6 +20,14 @@ class MovieList extends React.Component {
     this.handleFilterWatched = this.handleFilterWatched.bind(this);
     this.handleFilterUnwatched = this.handleFilterUnwatched.bind(this);
     this.handleShowAll = this.handleShowAll.bind(this);
+  }
+
+  componentWillMount() {
+    axios.get('/movies').then((res) => {
+      this.setState({
+        movies: res.data
+      });
+    });
   }
 
   handleClearSearch() {
@@ -59,10 +63,16 @@ class MovieList extends React.Component {
   }
 
   handleOnAdd(movie) {
-    const newMovieList = this.state.movies;
-    newMovieList.push({ title: movie });
-    this.setState({
-      movies: newMovieList
+    axios.post('/movie', {
+      newMovie: movie
+    }).then((res) => {
+      axios.get('/movies').then((res) => {
+        this.setState({
+          movies: res.data
+        });
+      });
+    }).catch((error) => {
+      console.log(error);
     });
     // TODO: Check if movie is already in list
   }
