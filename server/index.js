@@ -1,26 +1,31 @@
 const express = require('express');
-const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
+const Promise = require('bluebird');
+const movieAPI = require('../lib/movieAPI');
 
+const app = express();
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../client/dist')));
 app.listen(3000, function () { console.log('MovieList app listening on port 3000!') });
 
-const movies = [
-  { title: 'Mean Girls', watched: false },
-  { title: 'Hackers', watched: false },
-  { title: 'The Grey', watched: false },
-  { title: 'Sunshine', watched: false },
-  { title: 'Ex Machina', watched: false },
-];
+app.get('/load', (req, res) => {
+  movieAPI.initialLoad().then((response) => {
+    const movies = movieAPI.parseResponse(response);
+    res.send(movies);
+  }).catch((err) => {
+    console.log(err);
+  });
+});
 
 app.get('/movies', (req, res) => {
+  // TODO: Update to get movies from API
   res.send(movies);
 });
 
 app.post('/movie', (req, res) => {
+  // TODO: Add movie to database
   const newMovieObj = {
     title: req.body.newMovie,
     watched: false
