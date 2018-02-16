@@ -23,7 +23,8 @@ class MovieList extends React.Component {
   }
 
   componentWillMount() {
-    axios.get('/movies').then((res) => {
+    axios.get('/load').then((res) => {
+      console.log('app res: ', res);
       this.setState({
         movies: res.data
       });
