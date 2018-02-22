@@ -15,10 +15,10 @@ export default class Movie extends React.Component {
     return (
       <div>
         <div className="movie">
-          <p>{this.props.movie.title}</p>
+          <p>{this.props.movie.title} {this.props.movie.watched ? <i className="material-icons">done</i> : null}</p>
           <button onClick={this.handleOnWatched}>Watched</button>
         </div>
       </div>
     );
   }
-};
+}
