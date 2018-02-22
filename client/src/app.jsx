@@ -46,13 +46,8 @@ class MovieList extends React.Component {
   handleOnSearch(text) {
     this.handleClearSearch();
     const searchTerm = text.charAt(0).toUpperCase() + text.substr(1);
-    let searchResults = [];
-    const movieList = this.state.movies;
-    movieList.forEach((movie) => {
-      if (movie.title.includes(searchTerm)) {
-        searchResults.push(movie);
-      }
-    });
+    const matchSearch = movie => movie.title.includes(searchTerm);
+    let searchResults = this.state.movies.filter(matchSearch);
     if (searchResults.length === 0) {
       searchResults = [
         { title: 'There are no movies on your list with this title. Please try another search term!' }
