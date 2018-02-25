@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const Promise = require('bluebird');
+const movieAPI = require('../lib/movieAPI');
 
 const db = mysql.createConnection({
   host: 'localhost',
@@ -9,20 +10,35 @@ const db = mysql.createConnection({
 });
 
 db.connect((err) => {
-  if (err) return console.log('Error connecting');
+  if (err) return console.log('Error connecting: ', err);
   console.log('Connection successful');
 });
 
 module.exports.save = (movie) => {
-  const sql = `REPLACE INTO movies (title, watched) VALUES ('${movie.title}', '${movie.watched}')`;
-
+  const sql = 'REPLACE INTO movies (title, summary, year, runtime, rating, watched, poster) VALUES (?, ?, ?, ?, ?, ?, ?)';
   return new Promise((resolve, reject) => {
-    db.query(sql, (err, results) => {
+    db.query(sql, [movie.title, movie.summary, movie.year, movie.runtime, movie.rating, movie.image, movie.watched], (err, results) => {
       if (err) {
         reject(err);
       } else {
-        console.log('results: ', results);
-        Promise.resolve(db.query(`SELECT * FROM movies WHERE id = ${results.insertId}`));
+        console.log('results from saving: ', results);
+        resolve(results);
+      }
+    });
+  });
+};
+
+module.exports.saveMulti = (movies) => {
+  const movieList = movieAPI.parseResponse(movies);
+  const sql = 'INSERT IGNORE INTO movies (title, summary, year, runtime, rating, watched, poster) VALUES ?';
+  return new Promise((resolve, reject) => {
+    db.query(sql, [movieList], (err, results) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      } else {
+        console.log('results from saving: ', results);
+        resolve(results);
       }
     });
   });
@@ -42,9 +58,10 @@ module.exports.retrieve = () => {
 };
 
 module.exports.search = (term) => {
-  const sql = `SELECT * FROM movies WHERE title CONTAINS ${term}`;
+  const sql = 'SELECT * FROM movies WHERE title CONTAINS ?';
   return new Promise((resolve, reject) => {
-    db.query(sql, (err, results) => {
+    db.query(sql, [term], (err, results) => {
+      console.log('results from search: ', results);
       if (err) {
         reject(err);
       } else {
