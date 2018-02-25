@@ -1,12 +1,15 @@
+DROP DATABASE IF EXISTS moviesDB;
 CREATE DATABASE IF NOT EXISTS moviesDB;
 USE moviesDB;
 
 CREATE TABLE IF NOT EXISTS movies (
-  title VARCHAR(30),
+  id INTEGER AUTO_INCREMENT NOT NULL,
+  title VARCHAR(30) NOT NULL,
   summary TEXT,
   year DATE,
-  runtime INT,
+  runtime INTEGER,
   rating FLOAT,
   watched BOOLEAN,
-  poster TEXT
+  poster TEXT,
+  PRIMARY KEY(id)
 );
