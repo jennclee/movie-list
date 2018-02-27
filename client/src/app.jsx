@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Movie from './components/Movie.jsx';
-import Search from './components/Search.jsx';
-import AddMovie from './components/AddMovie.jsx';
+import Movie from './components/Movie';
+import Search from './components/Search';
+import AddMovie from './components/AddMovie';
 
 const axios = require('axios');
 
@@ -45,36 +45,30 @@ class MovieList extends React.Component {
 
   handleOnSearch(text) {
     this.handleClearSearch();
-    const searchTerm = text.charAt(0).toUpperCase() + text.substr(1);
-    const matchSearch = movie => movie.title.includes(searchTerm);
-    let searchResults = this.state.movies.filter(matchSearch);
-    if (searchResults.length === 0) {
-      searchResults = [
-        { title: 'There are no movies on your list with this title. Please try another search term!' }
-      ];
-    }
-    this.setState({
-      movies: searchResults
-    });
+    let searchResults;
+    axios.get(`/search?term=${text}`)
+      .then((response) => {
+        searchResults = response.data;
+        if (searchResults.length === 0) {
+          searchResults = [
+            { title: 'There are no movies on your list with this title. Please try another search term!' }
+          ];
+        }
+        this.setState({
+          movies: searchResults
+        });
+      }).catch(error => console.log(error));
   }
 
   handleOnAdd(movie) {
     axios.post('/movie', {
       newMovie: movie
-    }).then((res) => {
-      axios.get('/movies').then((res) => {
-        this.setState({
-          movies: res.data
-        });
-      });
-    }).catch((error) => {
-      console.log(error);
-    });
-    // TODO: Check if movie is already in list
+    })
+    .catch(error => console.log(error));
   }
 
   handleOnWatched(movie) {
-    let updatedMovies = this.state.movies;
+    const updatedMovies = this.state.movies;
     updatedMovies.forEach((updatedMovie) => {
       if (updatedMovie.title === movie.title) {
         updatedMovie.watched = !updatedMovie.watched;
@@ -135,9 +129,7 @@ class MovieList extends React.Component {
           <button onClick={this.handleShowAll}>All</button>
           <button onClick={this.handleFilterWatched}>Watched</button>
           <button onClick={this.handleFilterUnwatched}>Unwatched</button>
-          {this.state.movies.map((movie) => {
-            return <Movie movie={movie} key={movie.title} watched={this.handleOnWatched} />;
-          })}
+          {this.state.movies.map(movie => <Movie movie={movie} key={movie.title} watched={this.handleOnWatched} />)}
         </div>
       </div>
     );
