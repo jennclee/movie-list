@@ -25,16 +25,20 @@ app.get('/movies', (req, res) => {
 });
 
 app.get('/search', (req, res) => {
-
+  const searchTerm = req.query.term;
+  db.search(searchTerm).then(response => res.status(200).send(response));
 });
 
 app.post('/movie', (req, res) => {
-  // TODO: Add movie to database
-  let addMovies = [];
-  const newMovieObj = {
-    title: req.body.newMovie,
-    watched: false
-  };
-  addMovies.push(newMovieObj);
-  res.status(200).send(addMovies);
+  const newMovieObj = [
+    req.body.newMovie,
+    0
+  ];
+  console.log('Posting movie: ', newMovieObj);
+  db.save(newMovieObj)
+    .then(() => res.status(200).send('Saved movie!'))
+    .catch((err) => {
+      res.status(500).send('Error saving movie');
+      console.log(err);
+    });
 });
