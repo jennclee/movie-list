@@ -15,7 +15,7 @@ db.connect((err) => {
 });
 
 module.exports.save = (movie) => {
-  const sql = 'INSERT IGNORE INTO movies (title, watched) VALUES ?';
+  const sql = 'INSERT IGNORE INTO movies (title, watched) VALUES (?)';
   return new Promise((resolve, reject) => {
     db.query(sql, [movie], (err, results) => {
       if (err) {
