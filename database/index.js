@@ -15,13 +15,12 @@ db.connect((err) => {
 });
 
 module.exports.save = (movie) => {
-  const sql = 'REPLACE INTO movies (title, summary, year, runtime, rating, watched, poster) VALUES (?, ?, ?, ?, ?, ?, ?)';
+  const sql = 'INSERT IGNORE INTO movies (title, watched) VALUES ?';
   return new Promise((resolve, reject) => {
-    db.query(sql, [movie.title, movie.summary, movie.year, movie.runtime, movie.rating, movie.image, movie.watched], (err, results) => {
+    db.query(sql, [movie], (err, results) => {
       if (err) {
         reject(err);
       } else {
-        console.log('results from saving: ', results);
         resolve(results);
       }
     });
@@ -37,7 +36,6 @@ module.exports.saveMulti = (movies) => {
         console.log(err);
         reject(err);
       } else {
-        console.log('results from saving: ', results);
         resolve(results);
       }
     });
@@ -58,10 +56,9 @@ module.exports.retrieve = () => {
 };
 
 module.exports.search = (term) => {
-  const sql = 'SELECT * FROM movies WHERE title CONTAINS ?';
+  const sql = 'SELECT * FROM movies WHERE UPPER(title) LIKE UPPER(?)';
   return new Promise((resolve, reject) => {
-    db.query(sql, [term], (err, results) => {
-      console.log('results from search: ', results);
+    db.query(sql, `%${term}%`, (err, results) => {
       if (err) {
         reject(err);
       } else {
