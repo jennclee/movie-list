@@ -12,7 +12,8 @@ app.listen(3000, function () { console.log('MovieList app listening on port 3000
 
 app.get('/load', (req, res) => {
   movieAPI.initialLoad().then((response) => {
-    db.saveMulti(response).then(() => {
+    const movieList = movieAPI.parseResponse(response);
+    db.saveMulti(movieList).then(() => {
       db.retrieve().then(data => res.status(200).send(data)).catch(err => console.log(err));
     });
   }).catch((err) => {

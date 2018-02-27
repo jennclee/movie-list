@@ -28,10 +28,9 @@ module.exports.save = (movie) => {
 };
 
 module.exports.saveMulti = (movies) => {
-  const movieList = movieAPI.parseResponse(movies);
   const sql = 'INSERT IGNORE INTO movies (title, summary, year, runtime, rating, watched, poster) VALUES ?';
   return new Promise((resolve, reject) => {
-    db.query(sql, [movieList], (err, results) => {
+    db.query(sql, [movies], (err, results) => {
       if (err) {
         console.log(err);
         reject(err);
