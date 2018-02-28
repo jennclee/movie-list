@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Movie from './components/Movie';
-import Search from './components/Search';
-import AddMovie from './components/AddMovie';
+import Movie from './components/Movie.jsx';
+import Search from './components/Search.jsx';
+import AddMovie from './components/AddMovie.jsx';
 
 const axios = require('axios');
 
@@ -12,6 +12,7 @@ class MovieList extends React.Component {
     this.state = {
       movies: [],
       originalMovies: [],
+      view: 'all'
     };
     this.handleOnSearch = this.handleOnSearch.bind(this);
     this.handleClearSearch = this.handleClearSearch.bind(this);
@@ -20,6 +21,7 @@ class MovieList extends React.Component {
     this.handleFilterWatched = this.handleFilterWatched.bind(this);
     this.handleFilterUnwatched = this.handleFilterUnwatched.bind(this);
     this.handleShowAll = this.handleShowAll.bind(this);
+    this.handleViewChange = this.handleViewChange.bind(this);
   }
 
   componentWillMount() {
@@ -68,51 +70,40 @@ class MovieList extends React.Component {
   }
 
   handleOnWatched(movie) {
-    const updatedMovies = this.state.movies;
-    updatedMovies.forEach((updatedMovie) => {
-      if (updatedMovie.title === movie.title) {
-        updatedMovie.watched = !updatedMovie.watched;
-      }
+    movie.watched = movie.watched ? !movie.watched : true;
+    this.setState({
+      view: this.state.view
     });
   }
 
   handleShowAll() {
-    if (this.state.originalMovies.length > this.state.movies.length) {
-      this.setState({
-        movies: this.state.originalMovies
-      });
-    }
+    this.handleClearSearch();
+    this.setState({
+      view: 'all'
+    });
   }
 
   handleFilterWatched() {
-    const watchedMovies = this.state.originalMovies.filter((movie) => {
-      return movie.watched === true;
+    this.handleClearSearch();
+    this.setState({
+      view: 'watched'
     });
-    if (this.state.originalMovies.length < this.state.movies.length) {
-      this.setState({
-        originalMovies: this.state.movies,
-        movies: watchedMovies
-      });
-    } else {
-      this.setState({
-        movies: watchedMovies
-      });
-    }
   }
 
   handleFilterUnwatched() {
-    const unwatchedMovies = this.state.originalMovies.filter((movie) => {
-      return movie.watched === false;
+    this.handleClearSearch();
+    this.setState({
+      view: 'unwatched'
     });
-    if (this.state.originalMovies.length < this.state.movies.length) {
-      this.setState({
-        originalMovies: this.state.movies,
-        movies: unwatchedMovies
-      });
+  }
+
+  handleViewChange() {
+    if (this.state.view === 'all') {
+      return this.state.movies;
+    } else if (this.state.view === 'watched') {
+      return this.state.movies.filter(movie => !!movie.watched);
     } else {
-      this.setState({
-        movies: unwatchedMovies
-      });
+      return this.state.movies.filter(movie => !movie.watched);
     }
   }
 
@@ -129,7 +120,15 @@ class MovieList extends React.Component {
           <button onClick={this.handleShowAll}>All</button>
           <button onClick={this.handleFilterWatched}>Watched</button>
           <button onClick={this.handleFilterUnwatched}>Unwatched</button>
-          {this.state.movies.map(movie => <Movie movie={movie} key={movie.title} watched={this.handleOnWatched} />)}
+          <br/>
+          {this.state.view === 'all' ? <h4>Top 10 Movies:</h4> : null}
+          {this.handleViewChange().map((movie) => {
+          <Movie 
+          movie={movie} 
+          key={movie.title} 
+          watched={this.handleOnWatched} />
+          });
+          }
         </div>
       </div>
     );
