@@ -1,6 +1,5 @@
 const mysql = require('mysql');
 const Promise = require('bluebird');
-const movieAPI = require('../lib/movieAPI');
 
 const db = mysql.createConnection({
   host: 'localhost',
