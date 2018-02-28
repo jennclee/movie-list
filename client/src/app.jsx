@@ -120,14 +120,9 @@ class MovieList extends React.Component {
           <button onClick={this.handleShowAll}>All</button>
           <button onClick={this.handleFilterWatched}>Watched</button>
           <button onClick={this.handleFilterUnwatched}>Unwatched</button>
-          <br/>
+          <br />
           {this.state.view === 'all' ? <h4>Top 10 Movies:</h4> : null}
-          {this.handleViewChange().map((movie) => {
-          <Movie 
-          movie={movie} 
-          key={movie.title} 
-          watched={this.handleOnWatched} />
-          });
+          {this.handleViewChange().map(movie => <Movie movie={movie} key={movie.title} watched={this.handleOnWatched} />)
           }
         </div>
       </div>
